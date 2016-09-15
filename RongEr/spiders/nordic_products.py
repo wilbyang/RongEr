@@ -11,7 +11,7 @@ class NordicProductsSpider(CrawlSpider):
     )
     rules = (
         # Extract links matching 'item.php' and parse them with the spider's method parse_item
-        Rule(LinkExtractor(allow=('adulthealproducts\/adulthealproducts\/.*\.html', )), callback='parse_item'),
+        Rule(LinkExtractor(allow=(r'adulthealproducts/adulthealproducts/.*\.html', )), callback='parse_item'),
     )
 
     def parse_item(self, response):
