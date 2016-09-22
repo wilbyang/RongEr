@@ -22,3 +22,23 @@ class NordicProductsSpider(CrawlSpider):
         item['image'] = response.xpath("//div[@id='content']//img/@src").extract()[0]
         item['largeImage'] = response.xpath("//div[@id='content']//img/@src").extract()[0]
         yield item
+class LoginSpider(scrapy.Spider):
+    name = 'localhost'
+    allowed_domains = ["drupal.org"]
+    start_urls = ['https://www.drupal.org/user/login']
+
+    def parse(self, response):
+        return scrapy.FormRequest.from_response(
+            response,
+            formdata={'name': 'yang.wilby', 'pass': 'yangbo'},
+            callback=self.after_login
+        )
+
+    def after_login(self, response):
+        # check login succeed before going on
+        if "authentication failed" in response.body:
+            self.logger.error("Login failed")
+            return
+        self.logger.info(response)
+        self.logger.info("xxhh")     
+        # continue scraping with authenticated session...
